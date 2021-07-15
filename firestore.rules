@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /mobile/{document=**} {
+     allow read;
+     allow create: if request.auth.uid != null;
+     allow update: if request.auth.uid != null && request.auth.uid == request.resource.data.uid;
+     allow delete: if request.auth.uid != null && request.auth.uid == request.resource.data.uid;
+    }
+     match /headphones/{document=**} {
+     allow read;
+     allow create: if request.auth.uid != null;
+     allow update: if request.auth.uid != null && request.auth.uid == request.resource.data.uid;
+     allow delete: if request.auth.uid != null && request.auth.uid == request.resource.data.uid;
+    }
+  }
+  match /databases/images/documents{
+  	match /{document=**}{
+    	allow read;
+    }
+  }
+  match /databases/users/documents{
+  	match /{document=**}{
+    	allow read: if(request.auth.uid != null);
+      allow create: if(request.auth.uid != null);
+      allow update: if(request.auth.uid != null);
+    }
+  }
+}
